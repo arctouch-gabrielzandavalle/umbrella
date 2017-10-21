@@ -1,3 +1,5 @@
 <resources>
   <string name="app_name">Umbrella</string>
+  <string name="temperature">%1$s°</string>
+  <string name="settings">Settings</string>
 </resources>

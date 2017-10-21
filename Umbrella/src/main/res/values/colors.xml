@@ -13,4 +13,6 @@
 
     <!-- Forecast card colors -->
     <color name="forecast_card_divider">#ccc</color>
+
+    <color name="settings_action_bar_color">#757575</color>
 </resources>

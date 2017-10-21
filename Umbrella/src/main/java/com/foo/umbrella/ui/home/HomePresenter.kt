@@ -1,4 +1,4 @@
-package com.foo.umbrella.ui
+package com.foo.umbrella.ui.home
 
 import android.util.Log
 import com.foo.umbrella.data.ApiServicesProvider

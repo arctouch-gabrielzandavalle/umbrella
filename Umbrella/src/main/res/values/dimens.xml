@@ -1,4 +1,7 @@
 <resources>
     <dimen name="default_margin">16dp</dimen>
     <dimen name="default_padding">16dp</dimen>
+    <dimen name="temperature_text_size">56sp</dimen>
+    <dimen name="weather_description_text_size">16sp</dimen>
+    <dimen name="temperature_margin_top">56dp</dimen>
 </resources>

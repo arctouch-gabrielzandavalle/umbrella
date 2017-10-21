@@ -1,15 +1,12 @@
-package com.foo.umbrella.ui
+package com.foo.umbrella.ui.home
 
 import android.app.Application
 import com.foo.umbrella.data.model.WeatherData
 
-/**
- * Created by gabrielzandavalle on 10/21/17.
- */
 class HomeContracts {
 
     interface View {
-        fun showForecastForZip(WeatherData: WeatherData)
+        fun showForecastForZip(weatherData: WeatherData)
         fun getContext() : Application
     }
 
