@@ -1,6 +1,7 @@
 package com.foo.umbrella.ui.home
 
 import android.app.Application
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
@@ -18,11 +19,12 @@ class HomeActivity : AppCompatActivity(), HomeContracts.View {
     companion object {
         private const val FAHRENHEIT_REFERENCE = 60
         private const val CELSIUS_REFERENCE = 15
+        const val DEFAULT_ZIPCODE = "99551"
     }
 
     lateinit var homePresenter: HomeContracts.Presenter
 
-    private val isCelsius = false
+    private var isCelsius = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,8 +32,15 @@ class HomeActivity : AppCompatActivity(), HomeContracts.View {
 
         supportActionBar?.setHomeButtonEnabled(true)
 
+        val sharedPref = getSharedPreferences(
+                getString(R.string.preference_file_key), Context.MODE_PRIVATE)
+
+        val zipCode = sharedPref.getString("zipCode", DEFAULT_ZIPCODE)
+        val unit = sharedPref.getString("unit", "Celsius")
+        isCelsius = unit.equals("Celsius")
+
         homePresenter = HomePresenter(this)
-        homePresenter.loadForecastForZip("99551")
+        homePresenter.loadForecastForZip(zipCode)
     }
 
     override fun getContext(): Application {

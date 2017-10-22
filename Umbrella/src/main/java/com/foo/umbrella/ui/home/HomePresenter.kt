@@ -31,12 +31,11 @@ class HomePresenter(private val view: HomeContracts.View) : HomeContracts.Presen
                     val dailyForecastList = groupBy
                             .mapKeys { getCurrentDay(it.value.first()) }
                             .entries.map {
-                        val (k, v) = it
+                        val (day, hourlyForecast) = it
 
-                        val minTemperature = v.minBy { it.tempFahrenheit }
-                        val maxTemperature = v.maxBy { it.tempFahrenheit }
-
-                        DailyForecast(k, v, minTemperature, maxTemperature)
+                        val minTemperature = hourlyForecast.minBy { it.tempFahrenheit }
+                        val maxTemperature = hourlyForecast.maxBy { it.tempFahrenheit }
+                        DailyForecast(day, hourlyForecast, minTemperature, maxTemperature)
                     }
 
                     val currentDisplayWeather = CurrentWeatherDisplay(
@@ -47,6 +46,7 @@ class HomePresenter(private val view: HomeContracts.View) : HomeContracts.Presen
                     view.showForecastForZip(currentDisplayWeather)
                 }, {
                     Log.e(TAG, it.message)
+                    loadForecastForZip(HomeActivity.DEFAULT_ZIPCODE)
                 })
     }
 

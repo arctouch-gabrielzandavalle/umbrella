@@ -30,7 +30,7 @@
             android:layout_marginEnd="@dimen/divider_margin"
             android:layout_marginLeft="@dimen/divider_margin"
             android:layout_marginRight="@dimen/divider_margin"
-            android:layout_marginStart="@dimen/default_margin"
+            android:layout_marginStart="@dimen/divider_margin"
             android:background="@color/forecast_card_divider" />
 
         <com.foo.umbrella.ui.home.CustomGridView
