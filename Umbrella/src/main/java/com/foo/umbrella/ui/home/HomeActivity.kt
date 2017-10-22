@@ -34,6 +34,7 @@ class HomeActivity : AppCompatActivity(), HomeContracts.View {
         setContentView(R.layout.activity_home)
 
         supportActionBar?.setHomeButtonEnabled(true)
+        supportActionBar?.title = ""
 
         val sharedPref = getSharedPreferences(
                 getString(R.string.preference_file_key), Context.MODE_PRIVATE)

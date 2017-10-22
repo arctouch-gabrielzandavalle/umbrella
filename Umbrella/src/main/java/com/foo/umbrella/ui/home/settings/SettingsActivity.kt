@@ -28,10 +28,9 @@ class SettingsActivity : AppCompatActivity() {
         val sharedPref = getSharedPreferences(
                 getString(R.string.preference_file_key), Context.MODE_PRIVATE)
 
-        val currentZipCode = sharedPref.getString(HomeActivity.ZIPCODE, HomeActivity.DEFAULT_ZIPCODE)
-        zipCode.text = currentZipCode
-        val currentUnit = sharedPref.getString(HomeActivity.UNIT, HomeActivity.CELSIUS)
-        unit.text = currentUnit
+        zipCode.text = sharedPref.getString(HomeActivity.ZIPCODE, HomeActivity.DEFAULT_ZIPCODE)
+        unit.text = sharedPref.getString(HomeActivity.UNIT, HomeActivity.CELSIUS)
+
     }
 
     private fun promptForUnit() {
