@@ -8,6 +8,7 @@ class HomeContracts {
     interface View {
         fun showForecastForZip(currentWeatherDisplay: CurrentWeatherDisplay)
         fun getContext(): Application
+        fun showErrorMessage()
     }
 
     interface Presenter {

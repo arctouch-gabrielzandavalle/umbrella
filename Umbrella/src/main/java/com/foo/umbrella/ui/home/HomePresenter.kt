@@ -1,6 +1,7 @@
 package com.foo.umbrella.ui.home
 
 import android.util.Log
+import android.widget.Toast
 import com.foo.umbrella.R
 import com.foo.umbrella.data.ApiServicesProvider
 import com.foo.umbrella.data.model.CurrentWeatherDisplay
@@ -46,7 +47,7 @@ class HomePresenter(private val view: HomeContracts.View) : HomeContracts.Presen
                     view.showForecastForZip(currentDisplayWeather)
                 }, {
                     Log.e(TAG, it.message)
-                    loadForecastForZip(HomeActivity.DEFAULT_ZIPCODE)
+                    view.showErrorMessage()
                 })
     }
 

@@ -9,11 +9,13 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import com.foo.umbrella.R
 import com.foo.umbrella.data.model.CurrentWeatherDisplay
 import com.foo.umbrella.ui.adapter.DayForecastAdapter
 import com.foo.umbrella.ui.home.settings.SettingsActivity
 import kotlinx.android.synthetic.main.activity_home.*
+import org.w3c.dom.Text
 
 class HomeActivity : AppCompatActivity(), HomeContracts.View {
 
@@ -77,10 +79,14 @@ class HomeActivity : AppCompatActivity(), HomeContracts.View {
         return FAHRENHEIT_REFERENCE
     }
 
+    override fun showErrorMessage() {
+        Toast.makeText(this, "Invalid Zip Code. Loading default...", Toast.LENGTH_LONG).show()
+        homePresenter.loadForecastForZip(DEFAULT_ZIPCODE)
+    }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val inflater = menuInflater
         inflater.inflate(R.menu.menu, menu)
-
         return true
     }
 
