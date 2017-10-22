@@ -11,6 +11,7 @@ import android.view.Menu
 import android.view.MenuItem
 import com.foo.umbrella.R
 import com.foo.umbrella.data.model.CurrentWeatherDisplay
+import com.foo.umbrella.ui.adapter.DayForecastAdapter
 import com.foo.umbrella.ui.home.settings.SettingsActivity
 import kotlinx.android.synthetic.main.activity_home.*
 

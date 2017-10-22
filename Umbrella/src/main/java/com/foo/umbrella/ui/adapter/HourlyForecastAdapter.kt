@@ -1,4 +1,4 @@
-package com.foo.umbrella.ui.home
+package com.foo.umbrella.ui.adapter
 
 import android.content.Context
 import android.support.v4.content.ContextCompat

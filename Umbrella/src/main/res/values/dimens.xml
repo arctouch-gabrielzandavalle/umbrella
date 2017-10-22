@@ -13,4 +13,5 @@
     <dimen name="divider_height">1dp</dimen>
     <dimen name="icon_margin">4dp</dimen>
     <dimen name="cell_margin">12dp</dimen>
+    <dimen name="weather_header_height">180dp</dimen>
 </resources>
