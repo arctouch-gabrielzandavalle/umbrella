@@ -6,16 +6,12 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.text.TextUtils
-import android.util.Log
 import android.view.LayoutInflater
 import android.widget.ArrayAdapter
 import android.widget.EditText
 import com.foo.umbrella.R
 import com.foo.umbrella.ui.home.HomeActivity
 import kotlinx.android.synthetic.main.activity_settings.*
-import android.widget.ListView
-
-
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -32,8 +28,10 @@ class SettingsActivity : AppCompatActivity() {
         val sharedPref = getSharedPreferences(
                 getString(R.string.preference_file_key), Context.MODE_PRIVATE)
 
-        val currentZipCode = sharedPref.getString("zipCode", HomeActivity.DEFAULT_ZIPCODE)
+        val currentZipCode = sharedPref.getString(HomeActivity.ZIPCODE, HomeActivity.DEFAULT_ZIPCODE)
         zipCode.text = currentZipCode
+        val currentUnit = sharedPref.getString(HomeActivity.UNIT, HomeActivity.CELSIUS)
+        unit.text = currentUnit
     }
 
     private fun promptForUnit() {
@@ -48,7 +46,7 @@ class SettingsActivity : AppCompatActivity() {
 
         dialog.setAdapter(arrayAdapter) { dialog, which ->
             val selectedUnit = arrayAdapter.getItem(which)
-            saveOnSharedPreferences("unit", selectedUnit)
+            saveOnSharedPreferences(HomeActivity.UNIT, selectedUnit)
             unit.text = selectedUnit
             dialog.dismiss()
         }
@@ -65,7 +63,7 @@ class SettingsActivity : AppCompatActivity() {
                 .setView(promptView)
                 .setPositiveButton("OK", { dialog, id ->
                     if (!TextUtils.isEmpty(editText.text)) {
-                        saveOnSharedPreferences("zipCode", editText.text.toString())
+                        saveOnSharedPreferences(HomeActivity.ZIPCODE, editText.text.toString())
                         zipCode.text = editText.text
                     }
                 })

@@ -20,6 +20,9 @@ class HomeActivity : AppCompatActivity(), HomeContracts.View {
         private const val FAHRENHEIT_REFERENCE = 60
         private const val CELSIUS_REFERENCE = 15
         const val DEFAULT_ZIPCODE = "99551"
+        const val CELSIUS = "Celsius"
+        const val ZIPCODE = "zipCode"
+        const val UNIT = "unit"
     }
 
     lateinit var homePresenter: HomeContracts.Presenter
@@ -35,9 +38,9 @@ class HomeActivity : AppCompatActivity(), HomeContracts.View {
         val sharedPref = getSharedPreferences(
                 getString(R.string.preference_file_key), Context.MODE_PRIVATE)
 
-        val zipCode = sharedPref.getString("zipCode", DEFAULT_ZIPCODE)
-        val unit = sharedPref.getString("unit", "Celsius")
-        isCelsius = unit.equals("Celsius")
+        val zipCode = sharedPref.getString(ZIPCODE, DEFAULT_ZIPCODE)
+        val unit = sharedPref.getString(UNIT, CELSIUS)
+        isCelsius = unit == CELSIUS
 
         homePresenter = HomePresenter(this)
         homePresenter.loadForecastForZip(zipCode)
