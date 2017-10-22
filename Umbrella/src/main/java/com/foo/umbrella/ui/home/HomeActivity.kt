@@ -31,7 +31,7 @@ class HomeActivity : AppCompatActivity(), HomeContracts.View {
         supportActionBar?.setHomeButtonEnabled(true)
 
         homePresenter = HomePresenter(this)
-        homePresenter.loadForecastForZip("94016")
+        homePresenter.loadForecastForZip("99551")
     }
 
     override fun getContext(): Application {

@@ -38,7 +38,11 @@ class DayForecastAdapter(
 
         fun bind(item: DailyForecast) {
             currentDayLabel.text = item.dayOfWeek
-            gridView.adapter = HourlyForecastAdapter(context, item.hourlyForecast, isCelsius)
+
+            val minTemperature = item.hourlyForecast.minBy { it.tempFahrenheit }
+            val maxTemperature = item.hourlyForecast.maxBy { it.tempFahrenheit }
+
+            gridView.adapter = HourlyForecastAdapter(context, item.hourlyForecast, isCelsius, minTemperature, maxTemperature)
         }
     }
 }
