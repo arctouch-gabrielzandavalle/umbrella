@@ -15,7 +15,6 @@ import com.foo.umbrella.data.model.CurrentWeatherDisplay
 import com.foo.umbrella.ui.adapter.DayForecastAdapter
 import com.foo.umbrella.ui.home.settings.SettingsActivity
 import kotlinx.android.synthetic.main.activity_home.*
-import org.w3c.dom.Text
 
 class HomeActivity : AppCompatActivity(), HomeContracts.View {
 
@@ -80,7 +79,7 @@ class HomeActivity : AppCompatActivity(), HomeContracts.View {
     }
 
     override fun showErrorMessage() {
-        Toast.makeText(this, "Invalid Zip Code. Loading default...", Toast.LENGTH_LONG).show()
+        Toast.makeText(this, getString(R.string.invalid_zip_code), Toast.LENGTH_LONG).show()
         homePresenter.loadForecastForZip(DEFAULT_ZIPCODE)
     }
 
