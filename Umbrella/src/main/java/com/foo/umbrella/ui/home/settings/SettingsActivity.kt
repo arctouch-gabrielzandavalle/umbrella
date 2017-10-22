@@ -1,7 +1,7 @@
 package com.foo.umbrella.ui.home.settings
 
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import com.foo.umbrella.R
 
@@ -12,6 +12,6 @@ class SettingsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_settings)
         supportActionBar?.title = getString(R.string.app_name)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setBackgroundDrawable(ColorDrawable(R.color.settings_action_bar_color))
+        supportActionBar?.setBackgroundDrawable(ContextCompat.getDrawable(this, R.color.settings_action_bar_color))
     }
 }

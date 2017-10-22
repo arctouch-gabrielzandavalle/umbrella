@@ -3,24 +3,26 @@ package com.foo.umbrella.ui.home
 import android.app.Application
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import com.foo.umbrella.R
-import com.foo.umbrella.data.model.DailyForecast
-import com.foo.umbrella.data.model.ForecastCondition
-import com.foo.umbrella.data.model.WeatherData
+import com.foo.umbrella.data.model.CurrentWeatherDisplay
 import com.foo.umbrella.ui.home.settings.SettingsActivity
 import kotlinx.android.synthetic.main.activity_home.*
-import org.threeten.bp.LocalDateTime
-import org.threeten.bp.format.TextStyle
-import java.util.*
 
 class HomeActivity : AppCompatActivity(), HomeContracts.View {
 
+    companion object {
+        private const val FAHRENHEIT_REFERENCE = 60
+        private const val CELSIUS_REFERENCE = 15
+    }
+
     lateinit var homePresenter: HomeContracts.Presenter
+
+    private val isCelsius = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,39 +31,36 @@ class HomeActivity : AppCompatActivity(), HomeContracts.View {
         supportActionBar?.setHomeButtonEnabled(true)
 
         homePresenter = HomePresenter(this)
-        homePresenter.loadForecastForZip()
+        homePresenter.loadForecastForZip("94016")
     }
 
     override fun getContext(): Application {
         return this.application
     }
 
-    override fun showForecastForZip(weatherData: WeatherData) {
-        val currentObservation = weatherData.currentObservation
-        temperature.text = getString(R.string.temperature, Math.round(currentObservation.tempCelsius.toDouble()).toString())
+    override fun showForecastForZip(currentWeatherDisplay: CurrentWeatherDisplay) {
+        val currentObservation = currentWeatherDisplay.currentObservation
+
+        val currentTemperature = if (isCelsius) currentObservation.tempCelsius.toDouble() else currentObservation.tempFahrenheit.toDouble()
+        val roundedTemperature = Math.round(currentTemperature)
+
+        currentWeatherLayout.setBackgroundColor(
+                if (roundedTemperature < getReferenceMetric()) ContextCompat.getColor(this, R.color.weather_cool)
+                else ContextCompat.getColor(this, R.color.weather_warm))
+
+        temperature.text = getString(R.string.temperature, roundedTemperature.toString())
         supportActionBar?.title = currentObservation.displayLocation.fullName
         weatherDescription.text = currentObservation.weatherDescription
 
-        val groupBy = weatherData.forecast.groupBy { it.dateTime.dayOfYear }
-        val a = groupBy.mapKeys {getCurrentDay(it.value.first())}
-
-        val dailyForecastList =  a.entries.map {
-            val (k, v) = it
-                DailyForecast(k, v)
-        }
-
         dailyForecastRecyclerView.layoutManager = LinearLayoutManager(this)
-        dailyForecastRecyclerView.adapter = ForecastAdapter(dailyForecastList)
+        dailyForecastRecyclerView.adapter = DayForecastAdapter(currentWeatherDisplay.dailyForecastList, isCelsius)
     }
 
-    fun getCurrentDay(forecastCondition: ForecastCondition) : String {
-        val dayOfYear = forecastCondition.dateTime.dayOfYear
-        if (dayOfYear == LocalDateTime.now().dayOfYear){
-            return getString(R.string.today)
-        }else if (dayOfYear == LocalDateTime.now().dayOfYear + 1) {
-            return getString(R.string.tomorrow)
+    private fun getReferenceMetric(): Int {
+        if (isCelsius) {
+            return CELSIUS_REFERENCE
         }
-        return forecastCondition.dateTime.dayOfWeek.getDisplayName(TextStyle.FULL, Locale.getDefault())
+        return FAHRENHEIT_REFERENCE
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

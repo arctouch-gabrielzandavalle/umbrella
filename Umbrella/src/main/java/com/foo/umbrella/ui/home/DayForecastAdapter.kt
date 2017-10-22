@@ -11,13 +11,16 @@ import com.foo.umbrella.R
 import com.foo.umbrella.data.model.DailyForecast
 import kotlinx.android.synthetic.main.hourly_forecast_card.view.*
 
-class ForecastAdapter(private val dailyForecastList: List<DailyForecast>) : RecyclerView.Adapter<ForecastAdapter.ViewHolder>() {
+class DayForecastAdapter(
+        private val dailyForecastList: List<DailyForecast>,
+        private val isCelsius: Boolean) : RecyclerView.Adapter<DayForecastAdapter.ViewHolder>() {
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val context = parent.context
         val layoutInflater = LayoutInflater.from(context)
         val view = layoutInflater.inflate(R.layout.hourly_forecast_card, parent, false)
 
-        return ViewHolder(context, view)
+        return ViewHolder(context, view, isCelsius)
     }
 
     override fun getItemCount(): Int {
@@ -28,14 +31,14 @@ class ForecastAdapter(private val dailyForecastList: List<DailyForecast>) : Recy
         holder.bind(dailyForecastList[position])
     }
 
-    class ViewHolder(val context: Context, view: View) : RecyclerView.ViewHolder(view) {
+    class ViewHolder(val context: Context, view: View, val isCelsius: Boolean) : RecyclerView.ViewHolder(view) {
 
         val currentDayLabel: TextView = view.currentDayLabel
         val gridView: GridView = view.hourlyForecastGrid
 
         fun bind(item: DailyForecast) {
             currentDayLabel.text = item.dayOfWeek
-            gridView.adapter = ForecastConditionAdapter(context, item.hourlyForecast)
+            gridView.adapter = HourlyForecastAdapter(context, item.hourlyForecast, isCelsius)
         }
     }
 }

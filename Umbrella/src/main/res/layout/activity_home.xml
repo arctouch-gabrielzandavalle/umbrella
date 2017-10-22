@@ -6,10 +6,10 @@
     android:orientation="vertical">
 
     <LinearLayout
+        android:id="@+id/currentWeatherLayout"
         android:layout_width="match_parent"
         android:layout_height="180dp"
         android:layout_gravity="center_horizontal"
-        android:background="@color/weather_cool"
         android:orientation="vertical">
 
         <TextView

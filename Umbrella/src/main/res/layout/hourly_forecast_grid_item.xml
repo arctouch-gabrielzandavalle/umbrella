@@ -1,28 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:layout_gravity="center_horizontal"
-    android:layout_marginBottom="12dp"
-    android:orientation="vertical"
-    android:padding="4dp">
+    android:layout_marginBottom="@dimen/cell_margin"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/currentHour"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center" />
+        android:layout_gravity="center"
+        android:textSize="@dimen/current_hour_text_size" />
 
     <ImageView
         android:id="@+id/currentHourIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center" />
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/icon_margin" />
 
     <TextView
         android:id="@+id/currentHourCondition"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center" />
+        android:layout_gravity="center"
+        android:textSize="@dimen/current_hour_text_size" />
 
 </LinearLayout>
