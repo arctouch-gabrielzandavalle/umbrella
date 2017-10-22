@@ -24,7 +24,7 @@
 
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowActionBarOverlay">@null</item>
-        <item name="android:windowBackground">@color/settings_action_bar_color</item>
+        <item name="android:windowBackground">@android:color/white</item>
     </style>
 
 </resources>

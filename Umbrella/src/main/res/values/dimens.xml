@@ -4,4 +4,8 @@
     <dimen name="temperature_text_size">56sp</dimen>
     <dimen name="weather_description_text_size">16sp</dimen>
     <dimen name="temperature_margin_top">56dp</dimen>
+    <dimen name="card_corner_radius">4dp</dimen>
+    <dimen name="cardview_margin">8dp</dimen>
+    <dimen name="card_elevation">8dp</dimen>
+    <dimen name="current_day_title_size">21sp</dimen>
 </resources>
