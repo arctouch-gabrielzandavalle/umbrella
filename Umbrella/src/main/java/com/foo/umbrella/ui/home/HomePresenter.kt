@@ -32,7 +32,11 @@ class HomePresenter(private val view: HomeContracts.View) : HomeContracts.Presen
                             .mapKeys { getCurrentDay(it.value.first()) }
                             .entries.map {
                         val (k, v) = it
-                        DailyForecast(k, v)
+
+                        val minTemperature = v.minBy { it.tempFahrenheit }
+                        val maxTemperature = v.maxBy { it.tempFahrenheit }
+
+                        DailyForecast(k, v, minTemperature, maxTemperature)
                     }
 
                     val currentDisplayWeather = CurrentWeatherDisplay(
