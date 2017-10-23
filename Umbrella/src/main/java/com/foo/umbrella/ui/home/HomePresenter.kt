@@ -66,7 +66,7 @@ class HomePresenter(private val view: HomeContracts.View) : HomeContracts.Presen
         return forecastCondition.dateTime.dayOfWeek.getDisplayName(TextStyle.FULL, Locale.getDefault())
     }
 
-    override fun tryLoadingDefautlZipCode() {
+    override fun tryLoadingDefaultZipCode() {
         apiServicesProvider.weatherService.forecastForZipObservable(HomeActivity.DEFAULT_ZIPCODE)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())

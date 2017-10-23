@@ -14,6 +14,6 @@ class HomeContracts {
 
     interface Presenter {
         fun loadForecastForZip(zipCode: String)
-        fun tryLoadingDefautlZipCode()
+        fun tryLoadingDefaultZipCode()
     }
 }
