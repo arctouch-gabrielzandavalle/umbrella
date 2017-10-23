@@ -24,7 +24,6 @@ class HomeActivity : AppCompatActivity(), HomeContracts.View {
 
     companion object {
         private const val FAHRENHEIT_REFERENCE = 60
-        private const val CELSIUS_REFERENCE = 15
         const val DEFAULT_ZIPCODE = "99551"
         const val CELSIUS = "Celsius"
         const val ZIPCODE_SHARED_PREFERENCES_KEY = "zipCode"
@@ -96,7 +95,7 @@ class HomeActivity : AppCompatActivity(), HomeContracts.View {
         val roundedTemperature = Math.round(currentTemperature)
 
         currentWeatherLayout.setBackgroundColor(
-                if (roundedTemperature < getReferenceMetric()) ContextCompat.getColor(this, R.color.weather_cool)
+                if (isCoolWeather(currentObservation.tempFahrenheit.toDouble())) ContextCompat.getColor(this, R.color.weather_cool)
                 else ContextCompat.getColor(this, R.color.weather_warm))
 
         temperature.text = getString(R.string.temperature, roundedTemperature.toString())
@@ -107,11 +106,8 @@ class HomeActivity : AppCompatActivity(), HomeContracts.View {
         dailyForecastRecyclerView.adapter = DayForecastAdapter(currentWeatherDisplay.dailyForecastList, isCelsius)
     }
 
-    private fun getReferenceMetric(): Int {
-        if (isCelsius) {
-            return CELSIUS_REFERENCE
-        }
-        return FAHRENHEIT_REFERENCE
+    private fun isCoolWeather(fahrenheitTemperature: Double): Boolean {
+        return fahrenheitTemperature < FAHRENHEIT_REFERENCE
     }
 
     override fun showErrorMessage() {

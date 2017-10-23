@@ -15,6 +15,11 @@ import kotlinx.android.synthetic.main.activity_settings.*
 
 class SettingsActivity : AppCompatActivity() {
 
+    companion object {
+        private const val CEULSIUS_OPTION = "Celsius"
+        private const val FAHRENHEIT_OPTION = "Fahrenheit"
+    }
+
     private val sharedPreferencesUtil = SharedPreferencesUtil(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,8 +46,8 @@ class SettingsActivity : AppCompatActivity() {
         dialog.setTitle("Choose a Unit")
 
         val arrayAdapter = ArrayAdapter<String>(this, android.R.layout.select_dialog_singlechoice)
-        arrayAdapter.add("Celsius")
-        arrayAdapter.add("Fahrenheit")
+        arrayAdapter.add(CEULSIUS_OPTION)
+        arrayAdapter.add(FAHRENHEIT_OPTION)
 
         dialog.setNegativeButton("cancel") { dialog, which -> dialog.dismiss() }
 
