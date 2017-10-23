@@ -1,13 +1,11 @@
 package com.foo.umbrella.ui.home.settings
 
-import android.content.DialogInterface
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.text.TextUtils
 import android.view.LayoutInflater
-import android.widget.ArrayAdapter
 import android.widget.EditText
 import com.foo.umbrella.R
 import com.foo.umbrella.ui.home.HomeActivity
@@ -51,7 +49,7 @@ class SettingsActivity : AppCompatActivity() {
         val units = arrayOf(CELSIUS_OPTION, FAHRENHEIT_OPTION)
         dialog.setSingleChoiceItems(
                 units,
-                if(isCelsius) 0 else 1,
+                if (isCelsius) 0 else 1,
                 { dialogInterface, selectedUnit ->
                     sharedPreferencesUtil.savePreference(HomeActivity.UNIT_SHARED_PREFERENCES_KEY, units[selectedUnit])
                     unit.text = units[selectedUnit]
