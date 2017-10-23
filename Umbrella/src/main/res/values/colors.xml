@@ -6,6 +6,8 @@
     <color name="content_background">#fffafafa</color>
     <color name="text_color_primary">#dd000000</color>
     <color name="text_color_secondary">#89000000</color>
+    <color name="status_bar_color">#89000000</color>
+
 
     <!-- App-wide colors to indicate whether the temperature is warm or cool -->
     <color name="weather_warm">#ff9800</color>
@@ -13,4 +15,6 @@
 
     <!-- Forecast card colors -->
     <color name="forecast_card_divider">#ccc</color>
+
+    <color name="settings_action_bar_color">#757575</color>
 </resources>
