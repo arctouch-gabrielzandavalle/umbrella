@@ -1,6 +1,5 @@
 package com.foo.umbrella.ui.home
 
-import android.app.Application
 import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
@@ -47,6 +46,22 @@ class HomeActivity : AppCompatActivity(), HomeContracts.View {
         dialog = ProgressDialog(this)
 
         homePresenter = HomePresenter(this, ApiServicesProvider(this.application))
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        val sharedPref = sharedPreferencesUtil.getSharedPreferences()
+        val zipCode = sharedPref.getString(ZIPCODE_SHARED_PREFERENCES_KEY, "")
+
+        if (TextUtils.isEmpty(zipCode)) {
+            promptForZipCode()
+        } else {
+            homePresenter.loadForecastForZip(zipCode)
+        }
+
+        val unit = sharedPref.getString(UNIT_SHARED_PREFERENCES_KEY, CELSIUS)
+        isCelsius = unit == CELSIUS
     }
 
     private fun promptForZipCode() {
@@ -114,22 +129,6 @@ class HomeActivity : AppCompatActivity(), HomeContracts.View {
         val inflater = menuInflater
         inflater.inflate(R.menu.menu, menu)
         return true
-    }
-
-    override fun onStart() {
-        super.onStart()
-
-        val sharedPref = sharedPreferencesUtil.getSharedPreferences()
-        val zipCode = sharedPref.getString(ZIPCODE_SHARED_PREFERENCES_KEY, "")
-
-        if (TextUtils.isEmpty(zipCode)) {
-            promptForZipCode()
-        } else {
-            homePresenter.loadForecastForZip(zipCode)
-        }
-
-        val unit = sharedPref.getString(UNIT_SHARED_PREFERENCES_KEY, CELSIUS)
-        isCelsius = unit == CELSIUS
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
