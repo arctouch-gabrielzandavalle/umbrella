@@ -1,14 +1,15 @@
 package com.foo.umbrella.ui.home
 
 import android.util.Log
-import android.widget.Toast
 import com.foo.umbrella.R
 import com.foo.umbrella.data.ApiServicesProvider
 import com.foo.umbrella.data.model.CurrentWeatherDisplay
 import com.foo.umbrella.data.model.DailyForecast
 import com.foo.umbrella.data.model.ForecastCondition
+import com.foo.umbrella.data.model.WeatherData
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.TextStyle
+import retrofit2.adapter.rxjava.Result
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 import java.util.*
@@ -27,28 +28,32 @@ class HomePresenter(private val view: HomeContracts.View) : HomeContracts.Presen
                 .subscribeOn(Schedulers.io())
                 .subscribe({
 
-                    val weatherData = it.response().body()
-                    val groupBy = weatherData.forecast.groupBy { it.dateTime.dayOfYear }
-                    val dailyForecastList = groupBy
-                            .mapKeys { getCurrentDay(it.value.first()) }
-                            .entries.map {
-                        val (day, hourlyForecast) = it
-
-                        val minTemperature = hourlyForecast.minBy { it.tempFahrenheit }
-                        val maxTemperature = hourlyForecast.maxBy { it.tempFahrenheit }
-                        DailyForecast(day, hourlyForecast, minTemperature, maxTemperature)
-                    }
-
-                    val currentDisplayWeather = CurrentWeatherDisplay(
-                            weatherData.currentObservation,
-                            dailyForecastList
-                    )
-
+                    val currentDisplayWeather = transformWeatherData(it)
                     view.showForecastForZip(currentDisplayWeather)
                 }, {
                     Log.e(TAG, it.message)
                     view.showErrorMessage()
                 })
+    }
+
+    private fun transformWeatherData(weatherData: Result<WeatherData>): CurrentWeatherDisplay {
+        val weatherData = weatherData.response().body()
+        val groupBy = weatherData.forecast.groupBy { it.dateTime.dayOfYear }
+        val dailyForecastList = groupBy
+                .mapKeys { getCurrentDay(it.value.first()) }
+                .entries.map {
+            val (day, hourlyForecast) = it
+
+            val minTemperature = hourlyForecast.minBy { it.tempFahrenheit }
+            val maxTemperature = hourlyForecast.maxBy { it.tempFahrenheit }
+            DailyForecast(day, hourlyForecast, minTemperature, maxTemperature)
+        }
+
+        val currentDisplayWeather = CurrentWeatherDisplay(
+                weatherData.currentObservation,
+                dailyForecastList
+        )
+        return currentDisplayWeather
     }
 
     fun getCurrentDay(forecastCondition: ForecastCondition): String {
@@ -59,6 +64,20 @@ class HomePresenter(private val view: HomeContracts.View) : HomeContracts.Presen
             return view.getContext().getString(R.string.tomorrow)
         }
         return forecastCondition.dateTime.dayOfWeek.getDisplayName(TextStyle.FULL, Locale.getDefault())
+    }
+
+    override fun tryLoadingDefautlZipCode() {
+        apiServicesProvider.weatherService.forecastForZipObservable(HomeActivity.DEFAULT_ZIPCODE)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({
+
+                    val currentDisplayWeather = transformWeatherData(it)
+                    view.showForecastForZip(currentDisplayWeather)
+                }, {
+                    Log.e(TAG, it.message)
+                    view.showErrorOnRetryingMessage()
+                })
     }
 
 }

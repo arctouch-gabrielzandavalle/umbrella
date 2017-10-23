@@ -116,10 +116,14 @@ class HomeActivity : AppCompatActivity(), HomeContracts.View {
 
     override fun showErrorMessage() {
         Toast.makeText(this, getString(R.string.invalid_zip_code), Toast.LENGTH_LONG).show()
-        homePresenter.loadForecastForZip(DEFAULT_ZIPCODE)
+        homePresenter.tryLoadingDefautlZipCode()
         sharedPreferencesUtil.savePreference(
                 HomeActivity.ZIPCODE_SHARED_PREFERENCES_KEY,
                 DEFAULT_ZIPCODE)
+    }
+
+    override fun showErrorOnRetryingMessage() {
+        Toast.makeText(this, getString(R.string.could_load_defaul_zip_code), Toast.LENGTH_LONG).show()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

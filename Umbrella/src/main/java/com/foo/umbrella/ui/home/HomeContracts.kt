@@ -9,9 +9,11 @@ class HomeContracts {
         fun showForecastForZip(currentWeatherDisplay: CurrentWeatherDisplay)
         fun getContext(): Application
         fun showErrorMessage()
+        fun showErrorOnRetryingMessage()
     }
 
     interface Presenter {
         fun loadForecastForZip(zipCode: String)
+        fun tryLoadingDefautlZipCode()
     }
 }
