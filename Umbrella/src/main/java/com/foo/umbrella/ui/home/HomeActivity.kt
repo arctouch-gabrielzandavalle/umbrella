@@ -89,10 +89,6 @@ class HomeActivity : AppCompatActivity(), HomeContracts.View {
         homePresenter.loadForecastForZip(zipCode)
     }
 
-    override fun getContext(): Application {
-        return this.application
-    }
-
     override fun showForecast(currentWeatherDisplay: CurrentWeatherDisplay) {
         val currentObservation = currentWeatherDisplay.currentObservation
         val currentTemperature = if (isCelsius) currentObservation.tempCelsius.toDouble() else currentObservation.tempFahrenheit.toDouble()

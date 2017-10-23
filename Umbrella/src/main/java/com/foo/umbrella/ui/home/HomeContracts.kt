@@ -7,7 +7,6 @@ class HomeContracts {
 
     interface View {
         fun showForecast(currentWeatherDisplay: CurrentWeatherDisplay)
-        fun getContext(): Application
         fun showDialog()
         fun closeDialog()
         fun showErrorMessage()

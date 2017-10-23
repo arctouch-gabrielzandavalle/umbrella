@@ -23,7 +23,6 @@ class HomePresenter(
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({
-
                     val currentDisplayWeather = transformWeatherData(it)
                     view.showForecast(currentDisplayWeather)
                     view.closeDialog()
@@ -60,7 +59,6 @@ class HomePresenter(
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({
-
                     val currentDisplayWeather = transformWeatherData(it)
                     view.showForecast(currentDisplayWeather)
                     view.closeDialog()
