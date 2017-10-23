@@ -11,4 +11,5 @@
   <string name="invalid_zip_code">Invalid Zip Code. Loading default…</string>
   <string name="could_load_defaul_zip_code">Could not load default zip code. Please try again later.</string>
   <string name="choose_a_zip_code">Choose a Zip Code</string>
+  <string name="loading_weather">Loading Weather</string>
 </resources>

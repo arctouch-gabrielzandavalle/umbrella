@@ -1,6 +1,7 @@
 package com.foo.umbrella.ui.home
 
 import android.app.Application
+import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
@@ -14,6 +15,7 @@ import android.view.MenuItem
 import android.widget.EditText
 import android.widget.Toast
 import com.foo.umbrella.R
+import com.foo.umbrella.data.ApiServicesProvider
 import com.foo.umbrella.data.model.CurrentWeatherDisplay
 import com.foo.umbrella.ui.adapter.DayForecastAdapter
 import com.foo.umbrella.ui.home.settings.SettingsActivity
@@ -34,6 +36,7 @@ class HomeActivity : AppCompatActivity(), HomeContracts.View {
 
     private var isCelsius = false
     private val sharedPreferencesUtil = SharedPreferencesUtil(this)
+    private lateinit var dialog: ProgressDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,8 +44,9 @@ class HomeActivity : AppCompatActivity(), HomeContracts.View {
 
         supportActionBar?.setHomeButtonEnabled(true)
         supportActionBar?.title = ""
+        dialog = ProgressDialog(this)
 
-        homePresenter = HomePresenter(this)
+        homePresenter = HomePresenter(this, ApiServicesProvider(this.application))
 
         val sharedPref = sharedPreferencesUtil.getSharedPreferences()
         val zipCode = sharedPref.getString(ZIPCODE_SHARED_PREFERENCES_KEY, "")
@@ -137,5 +141,14 @@ class HomeActivity : AppCompatActivity(), HomeContracts.View {
             }
             else -> return super.onOptionsItemSelected(item)
         }
+    }
+
+    override fun showDialog() {
+        dialog.setMessage(getString(R.string.loading_weather))
+        dialog.show()
+    }
+
+    override fun closeDialog() {
+        dialog.dismiss()
     }
 }

@@ -9,7 +9,11 @@ import android.widget.GridView
 import android.widget.TextView
 import com.foo.umbrella.R
 import com.foo.umbrella.data.model.DailyForecast
+import com.foo.umbrella.data.model.ForecastCondition
 import kotlinx.android.synthetic.main.hourly_forecast_card.view.*
+import org.threeten.bp.LocalDateTime
+import org.threeten.bp.format.TextStyle
+import java.util.*
 
 class DayForecastAdapter(
         private val dailyForecastList: List<DailyForecast>,
@@ -37,7 +41,7 @@ class DayForecastAdapter(
         val gridView: GridView = view.hourlyForecastGrid
 
         fun bind(item: DailyForecast) {
-            currentDayLabel.text = item.dayOfWeek
+            currentDayLabel.text = getCurrentDay(item.day)
 
             gridView.adapter = HourlyForecastAdapter(
                     context,
@@ -45,6 +49,16 @@ class DayForecastAdapter(
                     isCelsius,
                     item.minTemperature,
                     item.maxTemperature)
+        }
+
+        fun getCurrentDay(forecastCondition: ForecastCondition): String {
+            val dayOfYear = forecastCondition.dateTime.dayOfYear
+            if (dayOfYear == LocalDateTime.now().dayOfYear) {
+                return context.getString(R.string.today)
+            } else if (dayOfYear == LocalDateTime.now().dayOfYear + 1) {
+                return context.getString(R.string.tomorrow)
+            }
+            return forecastCondition.dateTime.dayOfWeek.getDisplayName(TextStyle.FULL, Locale.getDefault())
         }
     }
 }
