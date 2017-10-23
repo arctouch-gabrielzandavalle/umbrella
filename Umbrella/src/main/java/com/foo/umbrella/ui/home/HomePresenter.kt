@@ -29,20 +29,19 @@ class HomePresenter(private val view: HomeContracts.View) : HomeContracts.Presen
                 .subscribe({
 
                     val currentDisplayWeather = transformWeatherData(it)
-                    view.showForecastForZip(currentDisplayWeather)
+                    view.showForecast(currentDisplayWeather)
                 }, {
                     Log.e(TAG, it.message)
                     view.showErrorMessage()
                 })
     }
 
-    private fun transformWeatherData(weatherData: Result<WeatherData>): CurrentWeatherDisplay {
-        val weatherData = weatherData.response().body()
+    private fun transformWeatherData(result: Result<WeatherData>): CurrentWeatherDisplay {
+        val weatherData = result.response().body()
         val groupBy = weatherData.forecast.groupBy { it.dateTime.dayOfYear }
         val dailyForecastList = groupBy
                 .mapKeys { getCurrentDay(it.value.first()) }
-                .entries.map {
-            val (day, hourlyForecast) = it
+                .entries.map { (day, hourlyForecast) ->
 
             val minTemperature = hourlyForecast.minBy { it.tempFahrenheit }
             val maxTemperature = hourlyForecast.maxBy { it.tempFahrenheit }
@@ -73,7 +72,7 @@ class HomePresenter(private val view: HomeContracts.View) : HomeContracts.Presen
                 .subscribe({
 
                     val currentDisplayWeather = transformWeatherData(it)
-                    view.showForecastForZip(currentDisplayWeather)
+                    view.showForecast(currentDisplayWeather)
                 }, {
                     Log.e(TAG, it.message)
                     view.showErrorOnRetryingMessage()

@@ -8,6 +8,7 @@
   <string name="unit">Units</string>
   <string name="fahrenheit">Fahrenheit</string>
   <string name="preference_file_key">umbrella</string>
-  <string name="invalid_zip_code">\"Invalid Zip Code. Loading default...\"</string>
+  <string name="invalid_zip_code">Invalid Zip Code. Loading default…</string>
   <string name="could_load_defaul_zip_code">Could not load default zip code. Please try again later.</string>
+  <string name="choose_a_zip_code">Choose a Zip Code</string>
 </resources>

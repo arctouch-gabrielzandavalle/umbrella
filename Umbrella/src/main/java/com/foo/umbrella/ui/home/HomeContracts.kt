@@ -6,7 +6,7 @@ import com.foo.umbrella.data.model.CurrentWeatherDisplay
 class HomeContracts {
 
     interface View {
-        fun showForecastForZip(currentWeatherDisplay: CurrentWeatherDisplay)
+        fun showForecast(currentWeatherDisplay: CurrentWeatherDisplay)
         fun getContext(): Application
         fun showErrorMessage()
         fun showErrorOnRetryingMessage()
