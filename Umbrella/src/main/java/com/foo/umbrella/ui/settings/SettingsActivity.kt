@@ -1,6 +1,5 @@
 package com.foo.umbrella.ui.home.settings
 
-import android.content.Context
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
@@ -11,9 +10,12 @@ import android.widget.ArrayAdapter
 import android.widget.EditText
 import com.foo.umbrella.R
 import com.foo.umbrella.ui.home.HomeActivity
+import com.foo.umbrella.ui.util.SharedPreferencesUtil
 import kotlinx.android.synthetic.main.activity_settings.*
 
 class SettingsActivity : AppCompatActivity() {
+
+    private val sharedPreferencesUtil = SharedPreferencesUtil(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,12 +27,13 @@ class SettingsActivity : AppCompatActivity() {
         zipPreference.setOnClickListener { promptForZipCode() }
         unitPreference.setOnClickListener { promptForUnit() }
 
-        val sharedPref = getSharedPreferences(
-                getString(R.string.preference_file_key), Context.MODE_PRIVATE)
+        setUpPrefs()
+    }
 
-        zipCode.text = sharedPref.getString(HomeActivity.ZIPCODE, HomeActivity.DEFAULT_ZIPCODE)
-        unit.text = sharedPref.getString(HomeActivity.UNIT, HomeActivity.CELSIUS)
-
+    private fun setUpPrefs() {
+        val sharedPref = sharedPreferencesUtil.getSharedPreferences()
+        zipCode.text = sharedPref.getString(HomeActivity.ZIPCODE_SHARED_PREFERENCES_KEY, HomeActivity.DEFAULT_ZIPCODE)
+        unit.text = sharedPref.getString(HomeActivity.UNIT_SHARED_PREFERENCES_KEY, HomeActivity.CELSIUS)
     }
 
     private fun promptForUnit() {
@@ -45,7 +48,7 @@ class SettingsActivity : AppCompatActivity() {
 
         dialog.setAdapter(arrayAdapter) { dialog, which ->
             val selectedUnit = arrayAdapter.getItem(which)
-            saveOnSharedPreferences(HomeActivity.UNIT, selectedUnit)
+            sharedPreferencesUtil.savePreference(HomeActivity.UNIT_SHARED_PREFERENCES_KEY, selectedUnit)
             unit.text = selectedUnit
             dialog.dismiss()
         }
@@ -62,23 +65,11 @@ class SettingsActivity : AppCompatActivity() {
                 .setView(promptView)
                 .setPositiveButton("OK", { dialog, id ->
                     if (!TextUtils.isEmpty(editText.text)) {
-                        saveOnSharedPreferences(HomeActivity.ZIPCODE, editText.text.toString())
+                        sharedPreferencesUtil.savePreference(HomeActivity.ZIPCODE_SHARED_PREFERENCES_KEY, editText.text.toString())
                         zipCode.text = editText.text
                     }
                 })
                 .setNegativeButton("Cancel", { dialog, id -> dialog.cancel() })
                 .show()
-    }
-
-    private fun saveOnSharedPreferences(key: String, value: String) {
-        val sharedPref = getSharedPreferences(
-                getString(R.string.preference_file_key), Context.MODE_PRIVATE)
-        val editor = sharedPref.edit()
-        editor.putString(key, value)
-        editor.apply()
-    }
-
-    override fun onBackPressed() {
-        super.onBackPressed()
     }
 }

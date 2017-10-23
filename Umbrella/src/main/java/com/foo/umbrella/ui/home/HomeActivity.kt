@@ -1,19 +1,23 @@
 package com.foo.umbrella.ui.home
 
 import android.app.Application
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.text.TextUtils
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.EditText
 import android.widget.Toast
 import com.foo.umbrella.R
 import com.foo.umbrella.data.model.CurrentWeatherDisplay
 import com.foo.umbrella.ui.adapter.DayForecastAdapter
 import com.foo.umbrella.ui.home.settings.SettingsActivity
+import com.foo.umbrella.ui.util.SharedPreferencesUtil
 import kotlinx.android.synthetic.main.activity_home.*
 
 class HomeActivity : AppCompatActivity(), HomeContracts.View {
@@ -23,13 +27,14 @@ class HomeActivity : AppCompatActivity(), HomeContracts.View {
         private const val CELSIUS_REFERENCE = 15
         const val DEFAULT_ZIPCODE = "99551"
         const val CELSIUS = "Celsius"
-        const val ZIPCODE = "zipCode"
-        const val UNIT = "unit"
+        const val ZIPCODE_SHARED_PREFERENCES_KEY = "zipCode"
+        const val UNIT_SHARED_PREFERENCES_KEY = "unit"
     }
 
     lateinit var homePresenter: HomeContracts.Presenter
 
     private var isCelsius = false
+    private val sharedPreferencesUtil = SharedPreferencesUtil(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,14 +43,46 @@ class HomeActivity : AppCompatActivity(), HomeContracts.View {
         supportActionBar?.setHomeButtonEnabled(true)
         supportActionBar?.title = ""
 
-        val sharedPref = getSharedPreferences(
-                getString(R.string.preference_file_key), Context.MODE_PRIVATE)
-
-        val zipCode = sharedPref.getString(ZIPCODE, DEFAULT_ZIPCODE)
-        val unit = sharedPref.getString(UNIT, CELSIUS)
-        isCelsius = unit == CELSIUS
-
         homePresenter = HomePresenter(this)
+
+        val sharedPref = sharedPreferencesUtil.getSharedPreferences()
+        val zipCode = sharedPref.getString(ZIPCODE_SHARED_PREFERENCES_KEY, "")
+
+        if (TextUtils.isEmpty(zipCode)) {
+            promptForZipCode()
+        } else {
+            homePresenter.loadForecastForZip(zipCode)
+        }
+
+        val unit = sharedPref.getString(UNIT_SHARED_PREFERENCES_KEY, CELSIUS)
+        isCelsius = unit == CELSIUS
+    }
+
+    private fun promptForZipCode() {
+        val layoutInflater = LayoutInflater.from(this)
+        val promptView = layoutInflater.inflate(R.layout.zipcode_dialog, null)
+        val editText: EditText = promptView.findViewById(R.id.zipCodeEntry) as EditText
+
+        AlertDialog.Builder(this)
+                .setTitle("Choose a ZipCode")
+                .setView(promptView)
+                .setPositiveButton("OK", { dialog, id ->
+                    if (!TextUtils.isEmpty(editText.text)) {
+                        onDialogOptionSelected(editText.text.toString())
+                    }
+                })
+                .setNegativeButton("Cancel", {
+                    dialog, id ->
+                    dialog.cancel()
+                    onDialogOptionSelected(DEFAULT_ZIPCODE)
+                })
+                .show()
+    }
+
+    fun onDialogOptionSelected(zipCode: String) {
+        sharedPreferencesUtil.savePreference(
+                HomeActivity.ZIPCODE_SHARED_PREFERENCES_KEY,
+                zipCode)
         homePresenter.loadForecastForZip(zipCode)
     }
 
@@ -55,7 +92,6 @@ class HomeActivity : AppCompatActivity(), HomeContracts.View {
 
     override fun showForecastForZip(currentWeatherDisplay: CurrentWeatherDisplay) {
         val currentObservation = currentWeatherDisplay.currentObservation
-
         val currentTemperature = if (isCelsius) currentObservation.tempCelsius.toDouble() else currentObservation.tempFahrenheit.toDouble()
         val roundedTemperature = Math.round(currentTemperature)
 
@@ -81,6 +117,9 @@ class HomeActivity : AppCompatActivity(), HomeContracts.View {
     override fun showErrorMessage() {
         Toast.makeText(this, getString(R.string.invalid_zip_code), Toast.LENGTH_LONG).show()
         homePresenter.loadForecastForZip(DEFAULT_ZIPCODE)
+        sharedPreferencesUtil.savePreference(
+                HomeActivity.ZIPCODE_SHARED_PREFERENCES_KEY,
+                DEFAULT_ZIPCODE)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

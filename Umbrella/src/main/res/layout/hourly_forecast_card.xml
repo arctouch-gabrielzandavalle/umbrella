@@ -33,7 +33,7 @@
             android:layout_marginStart="@dimen/divider_margin"
             android:background="@color/forecast_card_divider" />
 
-        <com.foo.umbrella.ui.home.CustomGridView
+        <com.foo.umbrella.ui.component.CustomGridView
             android:id="@+id/hourlyForecastGrid"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

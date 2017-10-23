@@ -1,4 +1,4 @@
-package com.foo.umbrella.ui.home
+package com.foo.umbrella.ui.component
 
 import android.content.Context
 import android.util.AttributeSet
