@@ -1,5 +1,6 @@
 package com.foo.umbrella.ui.home.settings
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
@@ -16,7 +17,7 @@ import kotlinx.android.synthetic.main.activity_settings.*
 class SettingsActivity : AppCompatActivity() {
 
     companion object {
-        private const val CEULSIUS_OPTION = "Celsius"
+        private const val CELSIUS_OPTION = "Celsius"
         private const val FAHRENHEIT_OPTION = "Fahrenheit"
     }
 
@@ -43,20 +44,22 @@ class SettingsActivity : AppCompatActivity() {
 
     private fun promptForUnit() {
         val dialog = AlertDialog.Builder(this)
-        dialog.setTitle("Choose a Unit")
 
-        val arrayAdapter = ArrayAdapter<String>(this, android.R.layout.select_dialog_singlechoice)
-        arrayAdapter.add(CEULSIUS_OPTION)
-        arrayAdapter.add(FAHRENHEIT_OPTION)
+        val sharedPref = sharedPreferencesUtil.getSharedPreferences()
+        val isCelsius = sharedPref.getString(HomeActivity.UNIT_SHARED_PREFERENCES_KEY, CELSIUS_OPTION) == CELSIUS_OPTION
+
+        val units = arrayOf(CELSIUS_OPTION, FAHRENHEIT_OPTION)
+        dialog.setSingleChoiceItems(
+                units,
+                if(isCelsius) 0 else 1,
+                { dialogInterface, selectedUnit ->
+                    sharedPreferencesUtil.savePreference(HomeActivity.UNIT_SHARED_PREFERENCES_KEY, units[selectedUnit])
+                    unit.text = units[selectedUnit]
+                    dialogInterface.dismiss()
+                })
 
         dialog.setNegativeButton("cancel") { dialog, which -> dialog.dismiss() }
 
-        dialog.setAdapter(arrayAdapter) { dialog, which ->
-            val selectedUnit = arrayAdapter.getItem(which)
-            sharedPreferencesUtil.savePreference(HomeActivity.UNIT_SHARED_PREFERENCES_KEY, selectedUnit)
-            unit.text = selectedUnit
-            dialog.dismiss()
-        }
         dialog.show()
     }
 
