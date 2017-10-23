@@ -80,8 +80,10 @@ class HomeActivity : AppCompatActivity(), HomeContracts.View {
                 .setNegativeButton("Cancel", {
                     dialog, id ->
                     dialog.cancel()
-                    onDialogOptionSelected(DEFAULT_ZIPCODE)
                 })
+                .setOnDismissListener {
+                    onDialogOptionSelected(DEFAULT_ZIPCODE)
+                }
                 .show()
     }
 
